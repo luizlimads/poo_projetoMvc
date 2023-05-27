@@ -88,6 +88,7 @@ public class AlunoDAO {
 		if (parametro == null)
 			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
 		try {
+			this.conn = ConnectionFactory.getConnection();
 			String SQL;
 			if (parametro.length() == 12) {
 				SQL = String.format("SELECT * FROM alunos "
@@ -170,6 +171,8 @@ public class AlunoDAO {
 		if (rm == null)
 			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
 		try {
+			this.conn = ConnectionFactory.getConnection();
+
 			String SQL = String.format("SELECT d.nome, m.ano, m.semestre, m.turno, m.nota, m.n_faltas FROM matriculados m "
 					+ "INNER JOIN alunos a ON m.aluno = a.rm "
 					+ "INNER JOIN disciplinas d ON m.disciplina = d.id "

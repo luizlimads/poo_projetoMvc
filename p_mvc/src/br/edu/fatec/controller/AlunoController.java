@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.fatec.dao.AlunoDAO;
@@ -23,17 +24,39 @@ public class AlunoController {
 	private List<Ufs> lUfs;
 	private List<Campus> lCampus;
 	private List<Curso> lCursos;
+	
+	private static AlunoController uniqueInstance;
 
-	
-	
-	public AlunoController() throws SQLException {
+	private AlunoController()  throws SQLException {
 		// chama a classe ConnectionFactory e estabele uma conexÃ£o
 		try {
 			buscarUfs();
 			buscarCampus();
+			buscarCursos();
 		} catch (Exception e) {
 			throw new SQLException("erro: \n" + e.getMessage());
 		}
+	}
+	
+	public List<Ufs> getlUfs() {
+		return lUfs;
+	}
+
+	public List<Campus> getlCampus() {
+		return lCampus;
+	}
+
+	public List<Curso> getlCursos() {
+		return lCursos;
+	}
+
+
+
+	public static synchronized AlunoController getInstance() throws SQLException {
+		if (uniqueInstance == null)
+			uniqueInstance = new AlunoController();
+
+		return uniqueInstance;
 	}
 	
 	/**Método para buscar uma lista de estados.
@@ -42,7 +65,8 @@ public class AlunoController {
 	public List<Ufs> buscarUfs() throws Exception {
 		try {
 			UfsDAO ufDao = new UfsDAO();
-			return ufDao.buscar();
+			this.lUfs = ufDao.buscar(); 
+			return lUfs;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -56,7 +80,8 @@ public class AlunoController {
 	public List<Campus> buscarCampus() throws Exception {
 		try {
 			CampusDAO campDao = new CampusDAO();
-			return campDao.buscar();
+			this.lCampus = campDao.buscar(); 
+			return lCampus;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -70,7 +95,8 @@ public class AlunoController {
 	public List<Curso> buscarCursos() throws Exception {
 		try {
 			CursosDAO curDao = new CursosDAO();
-			return curDao.buscar();
+			this.lCursos = curDao.buscar();
+			return this.lCursos;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		} finally {
@@ -79,7 +105,7 @@ public class AlunoController {
 	}
 	
 	
-	public void salvaAluno(
+	public String salvaAluno(
 			String cpf,
 			String email,
 			String nome,
@@ -111,11 +137,42 @@ public class AlunoController {
 					telefone
 					);
 			ald.salvar(al);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			return rm;
+		} catch (Exception err) {
+			throw new Exception(err.getMessage());
 		}
-//		Aluno al = new Aluno();
-		
+	}
+	
+	
+	
+	public String[] retornaBuscaAluno(String parametro) throws Exception{
+		List<Aluno> lAlun = new ArrayList<>();
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			lAlun = ald.buscar(parametro);
+			String[] res = new String[lAlun.size()];
+			int i = 0;
+			for(Aluno item: lAlun ){
+				res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
+				i++;
+			}
+			return res;
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+		}
+	}
+	
+	public Aluno buscaPorRm(String rm) throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			List<Aluno> lAlun = new ArrayList<>();
+			lAlun = ald.buscar(rm);
+			return lAlun.get(0);
+
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+
+		}
 		
 	}
 	

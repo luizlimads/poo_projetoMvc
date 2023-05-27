@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
@@ -24,6 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import br.edu.fatec.controller.AlunoController;
+import br.edu.fatec.model.Aluno;
 import br.edu.fatec.model.Campus;
 import br.edu.fatec.model.Curso;
 import br.edu.fatec.model.Ufs;
@@ -275,10 +277,6 @@ public class TelaPrincipal extends JFrame {
 		panel_3.add(btnSalvar);
 
 		btnLimpar = new JButton("Limpar");
-		btnLimpar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnLimpar.setBounds(366, 554, 89, 23);
 		panel_3.add(btnLimpar);
 
@@ -348,11 +346,17 @@ public class TelaPrincipal extends JFrame {
 		panel_3.add(lblNome_8_2);
 		
 		textFAno = new JTextField();
+		textFAno.setText("2023");
+		textFAno.setEnabled(false);
+		textFAno.setEditable(false);
 		textFAno.setColumns(10);
 		textFAno.setBounds(56, 23, 65, 34);
 		panel_3.add(textFAno);
 		
 		textFSemestre = new JTextField();
+		textFSemestre.setText("2");
+		textFSemestre.setEnabled(false);
+		textFSemestre.setEditable(false);
 		textFSemestre.setColumns(10);
 		textFSemestre.setBounds(194, 23, 72, 34);
 		panel_3.add(textFSemestre);
@@ -503,10 +507,10 @@ public class TelaPrincipal extends JFrame {
 		List<Campus> lCampus;
 		List<Curso> lCursos;
 		try {
-			AlunoController al = new AlunoController() ;
-			lUfs = al.buscarUfs();
-			lCampus = al.buscarCampus();
-			lCursos = al.buscarCursos();
+			AlunoController al = AlunoController.getInstance() ;
+			lUfs = al.getlUfs();
+			lCampus = al.getlCampus();
+			lCursos = al.getlCursos();
 			for(Ufs item: lUfs){
 				this.cboxUf.addItem(item.getAbreviacao());
 			}
@@ -524,8 +528,8 @@ public class TelaPrincipal extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					AlunoController al = new AlunoController();
-					al.salvaAluno(
+					AlunoController al = AlunoController.getInstance();
+					String rm = al.salvaAluno(
 							textFCpf.getText(), //cpf
 							textFEmail.getText(), //email
 							textFNome.getText(), // nome
@@ -539,10 +543,64 @@ public class TelaPrincipal extends JFrame {
 							textFSemestre.getText(), //semestre_matricula
 							textFTelefone.getText() //telefone
 							);
+					textFRm.setText(rm);
+					JOptionPane.showMessageDialog(null, "Aluno salvo com rm: "+rm+"\npressione limpar para salvar proximo aluno");
+					btnSalvar.setEnabled(false);
+					
 				}catch(Exception err) {
 					JOptionPane.showMessageDialog(null, err.getMessage());
 
 				}
+
+				
+			}
+		});
+		
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					AlunoController al = AlunoController.getInstance();
+			        ImageIcon icon = new ImageIcon("src/images/icons8-look-for-32.png");
+			        String entrada = (String)JOptionPane.showInputDialog(null,"Cpf-11 caracteres \nRm-12 caracteres",
+			        		"Pesquisa de aluno", JOptionPane.INFORMATION_MESSAGE, icon,null,"");
+
+			        if(entrada != null) {
+			        	String[] options = al.retornaBuscaAluno(entrada);
+			        	entrada = (String)JOptionPane.showInputDialog(null,"Alunos encontrados",
+			        			"Pesquisa de aluno", JOptionPane.QUESTION_MESSAGE,icon, options, options[2]);			        	
+			        }
+			        
+			        String array[] = new String[3];
+			        array = entrada.split(" - ");
+			        JOptionPane.showMessageDialog(null, array[0]);
+			        Aluno aluno = al.buscaPorRm(array[0]);
+					textFCpf.setText(aluno.getCpf()); //cpf
+					textFEmail.setText(aluno.getEmail()); //email
+					textFNome.setText(aluno.getNome()); // nome
+					textFDNascimento.setText(aluno.getData_nascimento()); //data_nascimento
+					textFEndereco.setText(aluno.getEndereco()); //endereco
+					textFMunicipio.setText(aluno.getMunicipio()); //municipio
+					textFTelefone.setText(aluno.getTelefone());//telefone
+					textFRm.setText(aluno.getRm()); //rm
+			        
+			    }
+				catch(Exception err) {
+					JOptionPane.showMessageDialog(null, err.getMessage());
+				}
+			}
+		});
+		
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFCpf.setText(""); //cpf
+				textFEmail.setText(""); //email
+				textFNome.setText(""); // nome
+				textFDNascimento.setText(""); //data_nascimento
+				textFEndereco.setText(""); //endereco
+				textFMunicipio.setText(""); //municipio
+				textFTelefone.setText("");//telefone
+				textFRm.setText(""); //rm
+				btnSalvar.setEnabled(true);
 
 				
 			}
