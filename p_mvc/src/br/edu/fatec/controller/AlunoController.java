@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import br.edu.fatec.dao.AlunoDAO;
 import br.edu.fatec.dao.CampusDAO;
 import br.edu.fatec.dao.CursosDAO;
@@ -14,6 +17,7 @@ import br.edu.fatec.dao.UfsDAO;
 import br.edu.fatec.model.Aluno;
 import br.edu.fatec.model.Campus;
 import br.edu.fatec.model.Curso;
+import br.edu.fatec.model.Disciplina;
 import br.edu.fatec.model.Ufs;
 import br.edu.fatec.util.ConnectionFactory;
 
@@ -51,7 +55,9 @@ public class AlunoController {
 	}
 
 
-
+	/**Retorna instancia de AlunoController.
+	 * @return AlunoControler - um objeto.
+	*/
 	public static synchronized AlunoController getInstance() throws SQLException {
 		if (uniqueInstance == null)
 			uniqueInstance = new AlunoController();
@@ -104,8 +110,16 @@ public class AlunoController {
 		}
 	}
 	
-	
+	/**Método para buscar salvar aluno na base de dados e retornar rm associado a ele.
+	 * @param cpf String - 11 numeros de um cpf valido, apenas numeros
+	 * @param email String - Email associado a aluno
+	 * @param nome String - Nome do aluno
+	 * @param data_nascimento String - Data de nascimento do aluno
+	 * @param endereco String - Endereco do aluno  
+	 * @return String - rm associado a aluno salvo.
+	*/
 	public String salvaAluno(
+			String rm = "",
 			String cpf,
 			String email,
 			String nome,
@@ -144,36 +158,68 @@ public class AlunoController {
 	}
 	
 	
-	
-	public String[] retornaBuscaAluno(String parametro) throws Exception{
+	/**Método para buscar informacoes resumidas de aluno.
+	 * @param parametro String - 11 ou 12 numeros  
+	 * @return String[] - resumo encontrado.
+	*/
+	public String[] buscaResultadoResumido(String parametro) throws Exception{
 		List<Aluno> lAlun = new ArrayList<>();
 		try {
 			AlunoDAO ald = new AlunoDAO();
-			lAlun = ald.buscar(parametro);
-			String[] res = new String[lAlun.size()];
-			int i = 0;
-			for(Aluno item: lAlun ){
-				res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
-				i++;
+			if(parametro.length()==11) {
+				lAlun = ald.buscaPorCpf(parametro);
+//				é um cpf
+				}
+			else if(parametro.length()==12) {
+				lAlun = ald.buscaPorRm(parametro);
+//				é um RM
 			}
-			return res;
+			if(lAlun.size() > 0) {
+				String[] res = new String[lAlun.size()];
+				int i =0;
+				for(Aluno item:lAlun){
+					res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
+					i++;
+				}				
+//				res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
+				return res;
+			}
+			else {
+				throw new Exception("Nenhum usuario encontrado");
+			}
 		} catch(Exception err) {
-			throw new Exception(err.getMessage());
+			throw new Exception("Erro na busca");
 		}
 	}
+	
+	
 	
 	public Aluno buscaPorRm(String rm) throws Exception{
 		try {
 			AlunoDAO ald = new AlunoDAO();
 			List<Aluno> lAlun = new ArrayList<>();
-			lAlun = ald.buscar(rm);
+			lAlun = ald.buscaPorRm(rm);
 			return lAlun.get(0);
 
 		} catch(Exception err) {
 			throw new Exception(err.getMessage());
 
 		}
-		
+	}
+
+	
+	
+	public List<Disciplina> buscaDisciplinaCursada(String rm) throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			List<Disciplina> lDisc = new ArrayList<>();
+			lDisc = ald.disciplinasFeitas(rm);
+			return lDisc;
+
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+
+		}
 	}
 	
 }

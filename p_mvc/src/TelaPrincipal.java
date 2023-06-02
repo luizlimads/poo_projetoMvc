@@ -23,11 +23,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 
 import br.edu.fatec.controller.AlunoController;
 import br.edu.fatec.model.Aluno;
 import br.edu.fatec.model.Campus;
 import br.edu.fatec.model.Curso;
+import br.edu.fatec.model.Disciplina;
 import br.edu.fatec.model.Ufs;
 
 public class TelaPrincipal extends JFrame {
@@ -45,18 +47,14 @@ public class TelaPrincipal extends JFrame {
 	private JButton btnSalvar_4;
 	private JButton btnSalvar_5;
 	private JButton btnSalvar_6;
-	private JComboBox<String> comboBox_3;
-	private JComboBox<String> comboBox_4;
+	private JComboBox<String> cboxDisciplina;
 	private JComboBox<String> comboBox_5;
 	private JComboBox<String> cboxCampus;
 	private JComboBox<String> cboxCurso;
 	private JComboBox<String> cboxUf;
-	private JEditorPane editorPane_10;
 	private JEditorPane editorPane_11;
 	private JEditorPane editorPane_12;
-	private JEditorPane editorPane_13;
 	private JEditorPane editorPane_14;
-	private JEditorPane editorPane_8;
 	private JEditorPane editorPane_9;
 	private JLabel lblNome;
 	private JLabel lblNome_1;
@@ -96,8 +94,8 @@ public class TelaPrincipal extends JFrame {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
-	private JPanel panel_3;
-	private JPanel panel_4;
+	private JPanel dadosDoAluno;
+	private JPanel notasEFaltas;
 	private JPanel panel_6;
 	private JRadioButton rdbMatutino;
 	private JRadioButton rdbNoturno;
@@ -115,6 +113,11 @@ public class TelaPrincipal extends JFrame {
 	private TextArea txtMostrar;
 	private JTextField textFAno;
 	private JTextField textFSemestre;
+	private JTextField textFRm_1;
+	private JTextField textFNome_1;
+	private JTextField textFCurso_1;
+	private JTextField textField;
+	private JTextField textField_1;
 
 
 	/**
@@ -171,179 +174,179 @@ public class TelaPrincipal extends JFrame {
 		tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane_1, BorderLayout.CENTER);
 
-		panel_3 = new JPanel();
-		tabbedPane_1.addTab("Dados do Aluno", null, panel_3, null);
-		panel_3.setLayout(null);
+		dadosDoAluno = new JPanel();
+		tabbedPane_1.addTab("Dados do Aluno", null, dadosDoAluno, null);
+		dadosDoAluno.setLayout(null);
 
 		lblNome = new JLabel("RGM");
 		lblNome.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome.setBounds(308, 22, 57, 34);
-		panel_3.add(lblNome);
+		dadosDoAluno.add(lblNome);
 
 		lblNome_2 = new JLabel("Nome");
 		lblNome_2.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_2.setBounds(21, 87, 107, 34);
-		panel_3.add(lblNome_2);
+		dadosDoAluno.add(lblNome_2);
 
 		lblNome_1 = new JLabel("CPF");
 		lblNome_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_1.setBounds(385, 143, 107, 34);
-		panel_3.add(lblNome_1);
+		dadosDoAluno.add(lblNome_1);
 
 		lblNome_3 = new JLabel("Data de Nascimento");
 		lblNome_3.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_3.setBounds(21, 143, 137, 34);
-		panel_3.add(lblNome_3);
+		dadosDoAluno.add(lblNome_3);
 
 		lblNome_4 = new JLabel("Endereço");
 		lblNome_4.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_4.setBounds(21, 198, 137, 34);
-		panel_3.add(lblNome_4);
+		dadosDoAluno.add(lblNome_4);
 
 		lblNome_5 = new JLabel("Municipio");
 		lblNome_5.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_5.setBounds(21, 254, 137, 34);
-		panel_3.add(lblNome_5);
+		dadosDoAluno.add(lblNome_5);
 
 		lblNome_6 = new JLabel("UF");
 		lblNome_6.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_6.setBounds(308, 254, 57, 34);
-		panel_3.add(lblNome_6);
+		dadosDoAluno.add(lblNome_6);
 
 		lblNome_7 = new JLabel("Tel.(DDD)");
 		lblNome_7.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_7.setBounds(408, 254, 107, 34);
-		panel_3.add(lblNome_7);
+		dadosDoAluno.add(lblNome_7);
 
 		lblNome_8 = new JLabel("E-mail");
 		lblNome_8.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_8.setBounds(21, 311, 107, 34);
-		panel_3.add(lblNome_8);
+		dadosDoAluno.add(lblNome_8);
 		
 		cboxUf = new JComboBox<String>();
 		cboxUf.setBounds(341, 259, 57, 27);
-		panel_3.add(cboxUf);
+		dadosDoAluno.add(cboxUf);
 
 		lblNome_9 = new JLabel("Dados do Aluno");
 		lblNome_9.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNome_9.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_9.setBounds(266, 54, 182, 34);
-		panel_3.add(lblNome_9);
+		dadosDoAluno.add(lblNome_9);
 
 		lblNome_10 = new JLabel("Dados do Curso");
 		lblNome_10.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNome_10.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_10.setBounds(256, 348, 182, 34);
-		panel_3.add(lblNome_10);
+		dadosDoAluno.add(lblNome_10);
 
 		lblNome_11 = new JLabel("Curso");
 		lblNome_11.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_11.setBounds(21, 399, 137, 34);
-		panel_3.add(lblNome_11);
+		dadosDoAluno.add(lblNome_11);
 
 		cboxCurso = new JComboBox<String>();
 		cboxCurso.setBounds(89, 400, 579, 34);
-		panel_3.add(cboxCurso);
+		dadosDoAluno.add(cboxCurso);
 
 		cboxCampus = new JComboBox<String>();
 		cboxCampus.setBounds(89, 453, 579, 34);
-		panel_3.add(cboxCampus);
+		dadosDoAluno.add(cboxCampus);
 
 		lblNome_12 = new JLabel("Campus");
 		lblNome_12.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_12.setBounds(10, 452, 137, 34);
-		panel_3.add(lblNome_12);
+		dadosDoAluno.add(lblNome_12);
 
 		rdbMatutino = new JRadioButton("Matutino");
 		rdbMatutino.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		Periodo.add(rdbMatutino);
 		rdbMatutino.setBounds(289, 504, 109, 23);
-		panel_3.add(rdbMatutino);
+		dadosDoAluno.add(rdbMatutino);
 
 		rdbVespertino = new JRadioButton("Vespertino");
 		rdbVespertino.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		Periodo.add(rdbVespertino);
 		rdbVespertino.setBounds(406, 504, 109, 23);
-		panel_3.add(rdbVespertino);
+		dadosDoAluno.add(rdbVespertino);
 
 		rdbNoturno = new JRadioButton("Noturno");
 		rdbNoturno.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		Periodo.add(rdbNoturno);
 		rdbNoturno.setBounds(536, 504, 109, 23);
-		panel_3.add(rdbNoturno);
+		dadosDoAluno.add(rdbNoturno);
 
 		btnSalvar = new JButton("Salvar");
 		btnSalvar.setBounds(601, 554, 89, 23);
-		panel_3.add(btnSalvar);
+		dadosDoAluno.add(btnSalvar);
 
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(366, 554, 89, 23);
-		panel_3.add(btnLimpar);
+		dadosDoAluno.add(btnLimpar);
 
 		btnExcluir = new JButton("Excluir");
 		btnExcluir.setBounds(236, 554, 89, 23);
-		panel_3.add(btnExcluir);
+		dadosDoAluno.add(btnExcluir);
 
 		lblNome_21 = new JLabel("Periodo");
 		lblNome_21.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_21.setBounds(10, 498, 137, 34);
-		panel_3.add(lblNome_21);
+		dadosDoAluno.add(lblNome_21);
 
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setBounds(485, 554, 89, 23);
-		panel_3.add(btnConsultar);
+		dadosDoAluno.add(btnConsultar);
 		
 		textFRm = new JTextField();
 		textFRm.setEnabled(false);
 		textFRm.setEditable(false);
 		textFRm.setBounds(379, 23, 289, 34);
-		panel_3.add(textFRm);
+		dadosDoAluno.add(textFRm);
 		textFRm.setColumns(10);
 		
 		textFNome = new JTextField();
 		textFNome.setColumns(10);
 		textFNome.setBounds(74, 87, 594, 34);
-		panel_3.add(textFNome);
+		dadosDoAluno.add(textFNome);
 		
 		textFDNascimento = new JTextField();
 		textFDNascimento.setColumns(10);
 		textFDNascimento.setBounds(156, 143, 191, 34);
-		panel_3.add(textFDNascimento);
+		dadosDoAluno.add(textFDNascimento);
 		
 		textFCpf = new JTextField();
 		textFCpf.setColumns(10);
 		textFCpf.setBounds(438, 143, 230, 34);
-		panel_3.add(textFCpf);
+		dadosDoAluno.add(textFCpf);
 		
 		textFEndereco = new JTextField();
 		textFEndereco.setColumns(10);
 		textFEndereco.setBounds(89, 198, 579, 34);
-		panel_3.add(textFEndereco);
+		dadosDoAluno.add(textFEndereco);
 		
 		textFEmail = new JTextField();
 		textFEmail.setColumns(10);
 		textFEmail.setBounds(74, 311, 594, 34);
-		panel_3.add(textFEmail);
+		dadosDoAluno.add(textFEmail);
 		
 		textFMunicipio = new JTextField();
 		textFMunicipio.setColumns(10);
 		textFMunicipio.setBounds(89, 254, 209, 34);
-		panel_3.add(textFMunicipio);
+		dadosDoAluno.add(textFMunicipio);
 		
 		textFTelefone = new JTextField();
 		textFTelefone.setColumns(10);
 		textFTelefone.setBounds(485, 254, 182, 34);
-		panel_3.add(textFTelefone);
+		dadosDoAluno.add(textFTelefone);
 		
 		JLabel lblNome_8_1 = new JLabel("Ano");
 		lblNome_8_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_8_1.setBounds(21, 22, 33, 34);
-		panel_3.add(lblNome_8_1);
+		dadosDoAluno.add(lblNome_8_1);
 		
 		JLabel lblNome_8_2 = new JLabel("Semestre");
 		lblNome_8_2.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_8_2.setBounds(127, 22, 65, 34);
-		panel_3.add(lblNome_8_2);
+		dadosDoAluno.add(lblNome_8_2);
 		
 		textFAno = new JTextField();
 		textFAno.setText("2023");
@@ -351,7 +354,7 @@ public class TelaPrincipal extends JFrame {
 		textFAno.setEditable(false);
 		textFAno.setColumns(10);
 		textFAno.setBounds(56, 23, 65, 34);
-		panel_3.add(textFAno);
+		dadosDoAluno.add(textFAno);
 		
 		textFSemestre = new JTextField();
 		textFSemestre.setText("2");
@@ -359,95 +362,121 @@ public class TelaPrincipal extends JFrame {
 		textFSemestre.setEditable(false);
 		textFSemestre.setColumns(10);
 		textFSemestre.setBounds(194, 23, 72, 34);
-		panel_3.add(textFSemestre);
+		dadosDoAluno.add(textFSemestre);
 
-		panel_4 = new JPanel();
-		tabbedPane_1.addTab("Notas e Faltas", null, panel_4, null);
-		panel_4.setLayout(null);
+		notasEFaltas = new JPanel();
+		tabbedPane_1.addTab("Notas e Faltas", null, notasEFaltas, null);
+		notasEFaltas.setLayout(null);
 
 		lblNome_13 = new JLabel("RGM");
 		lblNome_13.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_13.setBounds(337, 25, 57, 34);
-		panel_4.add(lblNome_13);
-
-		editorPane_8 = new JEditorPane();
-		editorPane_8.setBounds(404, 25, 197, 34);
-		panel_4.add(editorPane_8);
+		notasEFaltas.add(lblNome_13);
 
 		lblNome_14 = new JLabel("Nome");
 		lblNome_14.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_14.setBounds(10, 103, 107, 34);
-		panel_4.add(lblNome_14);
+		notasEFaltas.add(lblNome_14);
 
 		lblNome_15 = new JLabel("Curso");
 		lblNome_15.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_15.setBounds(10, 169, 137, 34);
-		panel_4.add(lblNome_15);
-
-		editorPane_10 = new JEditorPane();
-		editorPane_10.setBounds(97, 169, 593, 34);
-		panel_4.add(editorPane_10);
+		notasEFaltas.add(lblNome_15);
 
 		lblNome_16 = new JLabel("Desciplina");
 		lblNome_16.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_16.setBounds(20, 295, 137, 34);
-		panel_4.add(lblNome_16);
+		notasEFaltas.add(lblNome_16);
 
-		comboBox_3 = new JComboBox<>();
-		comboBox_3.setBounds(97, 300, 581, 27);
-		panel_4.add(comboBox_3);
-
-		comboBox_4 = new JComboBox();
-		comboBox_4.setBounds(420, 343, 113, 27);
-		panel_4.add(comboBox_4);
+		cboxDisciplina = new JComboBox<String>();
+		cboxDisciplina.setBounds(97, 300, 581, 27);
+		notasEFaltas.add(cboxDisciplina);
 
 		lblNome_17 = new JLabel("Semestre");
 		lblNome_17.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblNome_17.setBounds(293, 338, 137, 34);
-		panel_4.add(lblNome_17);
+		lblNome_17.setBounds(242, 340, 63, 34);
+		notasEFaltas.add(lblNome_17);
 
 		lblNome_18 = new JLabel("Nota");
 		lblNome_18.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_18.setBounds(207, 406, 137, 34);
-		panel_4.add(lblNome_18);
+		notasEFaltas.add(lblNome_18);
 
 		comboBox_5 = new JComboBox();
 		comboBox_5.setBounds(273, 411, 113, 27);
-		panel_4.add(comboBox_5);
+		notasEFaltas.add(comboBox_5);
 
 		lblNome_19 = new JLabel("Faltas");
 		lblNome_19.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_19.setBounds(441, 406, 137, 34);
-		panel_4.add(lblNome_19);
+		notasEFaltas.add(lblNome_19);
 
 		editorPane_11 = new JEditorPane();
 		editorPane_11.setBounds(527, 406, 137, 34);
-		panel_4.add(editorPane_11);
+		notasEFaltas.add(editorPane_11);
 
 		btnSalvar_1 = new JButton("Salvar");
 		btnSalvar_1.setBounds(602, 541, 89, 23);
-		panel_4.add(btnSalvar_1);
+		notasEFaltas.add(btnSalvar_1);
 
 		btnLimpar_1 = new JButton("Limpar");
 		btnLimpar_1.setBounds(489, 541, 89, 23);
-		panel_4.add(btnLimpar_1);
+		notasEFaltas.add(btnLimpar_1);
 
 		btnExcluir_1 = new JButton("Excluir");
 		btnExcluir_1.setBounds(242, 541, 89, 23);
-		panel_4.add(btnExcluir_1);
-
-		editorPane_13 = new JEditorPane();
-		editorPane_13.setBounds(97, 103, 593, 34);
-		panel_4.add(editorPane_13);
+		notasEFaltas.add(btnExcluir_1);
 
 		lblNome_22 = new JLabel("Dados para registro");
 		lblNome_22.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_22.setBounds(293, 255, 137, 34);
-		panel_4.add(lblNome_22);
+		notasEFaltas.add(lblNome_22);
 
 		btnSalvar_6 = new JButton("Consultar");
 		btnSalvar_6.setBounds(376, 541, 89, 23);
-		panel_4.add(btnSalvar_6);
+		notasEFaltas.add(btnSalvar_6);
+		
+		textFRm_1 = new JTextField();
+		textFRm_1.setEnabled(false);
+		textFRm_1.setEditable(false);
+		textFRm_1.setColumns(10);
+		textFRm_1.setBounds(389, 25, 289, 34);
+		notasEFaltas.add(textFRm_1);
+		
+		textFNome_1 = new JTextField();
+		textFNome_1.setEnabled(false);
+		textFNome_1.setEditable(false);
+		textFNome_1.setColumns(10);
+		textFNome_1.setBounds(57, 103, 621, 34);
+		notasEFaltas.add(textFNome_1);
+		
+		textFCurso_1 = new JTextField();
+		textFCurso_1.setEnabled(false);
+		textFCurso_1.setEditable(false);
+		textFCurso_1.setColumns(10);
+		textFCurso_1.setBounds(57, 169, 621, 34);
+		notasEFaltas.add(textFCurso_1);
+		
+		textField = new JTextField();
+		textField.setText("2023");
+		textField.setEnabled(false);
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBounds(57, 341, 87, 34);
+		notasEFaltas.add(textField);
+		
+		JLabel lblNome_17_1 = new JLabel("Ano");
+		lblNome_17_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblNome_17_1.setBounds(30, 340, 38, 34);
+		notasEFaltas.add(lblNome_17_1);
+		
+		textField_1 = new JTextField();
+		textField_1.setText("2");
+		textField_1.setEnabled(false);
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(307, 341, 87, 34);
+		notasEFaltas.add(textField_1);
 
 		panel_6 = new JPanel();
 		tabbedPane_1.addTab("Boletim", null, panel_6, null);
@@ -502,7 +531,7 @@ public class TelaPrincipal extends JFrame {
 		panel_6.add(btnSalvar_5);
 		
 		
-		
+		// ComboBox UfsCampusCursos
 		List<Ufs> lUfs = null;
 		List<Campus> lCampus;
 		List<Curso> lCursos;
@@ -523,88 +552,141 @@ public class TelaPrincipal extends JFrame {
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
+		// end ComboBox UfsCampusCursos
 		
-
+		// Painel DadosDoAluno
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					AlunoController al = AlunoController.getInstance();
-					String rm = al.salvaAluno(
-							textFCpf.getText(), //cpf
-							textFEmail.getText(), //email
-							textFNome.getText(), // nome
-							textFDNascimento.getText(), //data_nascimento
-							textFEndereco.getText(), //endereco
-							textFMunicipio.getText(), //municipio
-							cboxUf.getSelectedIndex()+1, //UF
-							cboxCurso.getSelectedIndex()+1, //curso
-							cboxCampus.getSelectedIndex()+1, //campus
-							textFAno.getText(), //ano_matricula
-							textFSemestre.getText(), //semestre_matricula
-							textFTelefone.getText() //telefone
-							);
-					textFRm.setText(rm);
-					JOptionPane.showMessageDialog(null, "Aluno salvo com rm: "+rm+"\npressione limpar para salvar proximo aluno");
-					btnSalvar.setEnabled(false);
-					
-				}catch(Exception err) {
-					JOptionPane.showMessageDialog(null, err.getMessage());
-
-				}
-
-				
+				salvarAluno();
 			}
 		});
 		
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					AlunoController al = AlunoController.getInstance();
-			        ImageIcon icon = new ImageIcon("src/images/icons8-look-for-32.png");
-			        String entrada = (String)JOptionPane.showInputDialog(null,"Cpf-11 caracteres \nRm-12 caracteres",
-			        		"Pesquisa de aluno", JOptionPane.INFORMATION_MESSAGE, icon,null,"");
-
-			        if(entrada != null) {
-			        	String[] options = al.retornaBuscaAluno(entrada);
-			        	entrada = (String)JOptionPane.showInputDialog(null,"Alunos encontrados",
-			        			"Pesquisa de aluno", JOptionPane.QUESTION_MESSAGE,icon, options, options[2]);			        	
-			        }
-			        
-			        String array[] = new String[3];
-			        array = entrada.split(" - ");
-			        JOptionPane.showMessageDialog(null, array[0]);
-			        Aluno aluno = al.buscaPorRm(array[0]);
-					textFCpf.setText(aluno.getCpf()); //cpf
-					textFEmail.setText(aluno.getEmail()); //email
-					textFNome.setText(aluno.getNome()); // nome
-					textFDNascimento.setText(aluno.getData_nascimento()); //data_nascimento
-					textFEndereco.setText(aluno.getEndereco()); //endereco
-					textFMunicipio.setText(aluno.getMunicipio()); //municipio
-					textFTelefone.setText(aluno.getTelefone());//telefone
-					textFRm.setText(aluno.getRm()); //rm
-			        
-			    }
-				catch(Exception err) {
-					JOptionPane.showMessageDialog(null, err.getMessage());
-				}
+				consultarAluno();
 			}
 		});
 		
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textFCpf.setText(""); //cpf
-				textFEmail.setText(""); //email
-				textFNome.setText(""); // nome
-				textFDNascimento.setText(""); //data_nascimento
-				textFEndereco.setText(""); //endereco
-				textFMunicipio.setText(""); //municipio
-				textFTelefone.setText("");//telefone
-				textFRm.setText(""); //rm
-				btnSalvar.setEnabled(true);
-
-				
+				limparCampoAluno();
 			}
 		});
+		// end Painel DadosDoAluno
+		
+		// Painel NotasEFaltas
+		btnSalvar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				salvarAluno();
+			}
+		});
+
+		// end Painel NotasEFaltas
+		
+	}
+	
+	/**Método que trata os dados e os envia para o controller
+	*/
+	private void salvarAluno() {
+		try {
+			AlunoController al = AlunoController.getInstance();
+			String rm = al.salvaAluno(
+					textFCpf.getText(), //cpf
+					textFEmail.getText(), //email
+					textFNome.getText(), // nome
+					textFDNascimento.getText(), //data_nascimento
+					textFEndereco.getText(), //endereco
+					textFMunicipio.getText(), //municipio
+					cboxUf.getSelectedIndex()+1, //UF
+					cboxCurso.getSelectedIndex()+1, //curso
+					cboxCampus.getSelectedIndex()+1, //campus
+					textFAno.getText(), //ano_matricula
+					textFSemestre.getText(), //semestre_matricula
+					textFTelefone.getText() //telefone
+					);
+			textFRm.setText(rm);
+			JOptionPane.showMessageDialog(null, "Aluno salvo com rm: "+rm+"\npressione limpar para salvar proximo aluno");
+			// Painel DadosDoAluno
+			btnSalvar.setText("Alterar");
+
+		}catch(Exception err) {
+			JOptionPane.showMessageDialog(null, err.getMessage());
+
+		}
+	}
+	
+	/**Método que trata os dados e os envia para o controller
+	*/
+	public void consultarAluno() {
+		try {
+			AlunoController al = AlunoController.getInstance();
+	        ImageIcon icon = new ImageIcon("src/images/icons8-look-for-32.png");
+	        String entrada = (String)JOptionPane.showInputDialog(null,"Cpf-11 caracteres \nRm-12 caracteres",
+	        		"Pesquisa de aluno", JOptionPane.INFORMATION_MESSAGE, icon,null,"");
+
+	        if(entrada != null) {
+	        	String[] options = al.buscaResultadoResumido(entrada);
+	        	entrada = (String)JOptionPane.showInputDialog(null,"Alunos encontrados",
+	        			"Pesquisa de aluno", JOptionPane.QUESTION_MESSAGE,icon, options, options[0]);			        	
+	        	if (entrada != null) {
+	        		String array[] = new String[3];
+	        		array = entrada.split(" - ");
+	        		Aluno aluno = al.buscaPorRm(array[0]);
+	        		//painel dados do aluno
+	        		textFCpf.setText(aluno.getCpf()); //cpf
+	        		textFEmail.setText(aluno.getEmail()); //email
+	        		textFNome.setText(aluno.getNome()); // nome
+	        		textFDNascimento.setText(aluno.getData_nascimento()); //data_nascimento
+	        		textFEndereco.setText(aluno.getEndereco()); //endereco
+	        		textFMunicipio.setText(aluno.getMunicipio()); //municipio
+	        		textFTelefone.setText(aluno.getTelefone());//telefone
+	        		textFRm.setText(aluno.getRm()); //rm
+	        		btnSalvar.setText("Alterar");
+	        		// painel notas e faltas
+	        		textFRm_1.setText(aluno.getRm());
+	        		textFNome_1.setText(aluno.getNome());
+	        		textFCurso_1.setText(array[2]);
+	        		carregarDisciplinas(al,aluno.getRm());
+
+	        	}
+	        }
+	    }
+		catch(Exception err) {
+			JOptionPane.showMessageDialog(null, "erro na view");
+		}
+	}
+	
+	private void carregarDisciplinas(AlunoController al, String rm) {
+		try {
+			List<Disciplina> lDisc = al.buscaDisciplinaCursada(rm);
+			if(lDisc.size()>0) {
+				DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cboxDisciplina.getModel();
+				for(Disciplina item: lDisc){
+					model.addElement(item.getNome());
+				}				
+			}
+		} catch(Exception err) {
+			JOptionPane.showMessageDialog(null, "Erro ao buscar disciplinas associadas");
+		}
+	}
+	
+	public void limparCampoAluno() {
+		textFCpf.setText(""); //cpf
+		textFEmail.setText(""); //email
+		textFNome.setText(""); // nome
+		textFDNascimento.setText(""); //data_nascimento
+		textFEndereco.setText(""); //endereco
+		textFMunicipio.setText(""); //municipio
+		textFTelefone.setText("");//telefone
+		textFRm.setText(""); //rm
+		textFAno.setText("2023");
+		textFSemestre.setText("2");
+		btnSalvar.setEnabled(true);
+	 	// painel notas e faltas
+    	textFRm_1.setText("");
+    	textFNome_1.setText("");
+    	textFCurso_1.setText("");
+
 		
 	}
 }

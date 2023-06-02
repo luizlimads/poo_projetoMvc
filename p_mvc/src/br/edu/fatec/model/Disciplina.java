@@ -1,17 +1,16 @@
 package br.edu.fatec.model;
 
-public class Matricula {
+public class Disciplina {
 	private String nome;
 	private String ano;
 	private String semestre;
-	private String turno;
 	private String nota;
 	private String numeroFaltas;
-	public Matricula(String nome, String ano, String semestre, String turno, String nota, String numeroFaltas) {
+	
+	public Disciplina(String nome, String ano, String semestre, String nota, String numeroFaltas) {
 		this.nome = nome;
 		this.ano = ano;
 		this.semestre = semestre;
-		this.turno = turno;
 		this.nota = nota;
 		this.numeroFaltas = numeroFaltas;
 	}
@@ -32,12 +31,6 @@ public class Matricula {
 	}
 	public void setSemestre(String semestre) {
 		this.semestre = semestre;
-	}
-	public String getTurno() {
-		return turno;
-	}
-	public void setTurno(String turno) {
-		this.turno = turno;
 	}
 	public String getNota() {
 		return nota;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.fatec.model.Aluno;
-import br.edu.fatec.model.Matricula;
+import br.edu.fatec.model.Disciplina;
 import br.edu.fatec.util.ConnectionFactory;
 
 /**Classe para comunicar com o banco de dados informacoes do aluno.
@@ -79,32 +79,20 @@ public class AlunoDAO {
 			ConnectionFactory.closeConnection(conn, ps);
 		}
 	}
-	
+
 	/**Método para buscar uma lista de alunos da base de dados.
 	 * @param parametro String - Identificação do aluno por rm ou cpf.
-	 * @return List<Aluno> - uma lista contendo dados pesquisados.
+	 * @return List<Aluno> - uma lista contendo dados pesquisados 0 ou N alunos.
 	*/
-	public List<Aluno> buscar(String parametro) throws Exception {
-		if (parametro == null)
+	public List<Aluno> buscaPorCpf(String cpf) throws Exception {
+		if (cpf == null)
 			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
 		try {
 			this.conn = ConnectionFactory.getConnection();
-			String SQL;
-			if (parametro.length() == 12) {
-				SQL = String.format("SELECT * FROM alunos "
-						+ "WHERE rm = '%s';",
-						parametro
-						);
-			}
-			else if (parametro.length() == 11) {
-				SQL = String.format("SELECT * FROM alunos "
-						+ "WHERE cpf = '%s';",
-						parametro
-						);
-			}
-			else {
-				throw new IllegalArgumentException("O valor passado nao pode corresponder aos parametros");
-			}
+			String SQL = String.format("SELECT * FROM alunos "
+					+ "WHERE cpf = '%s';",
+					cpf
+					);
 			ps = conn.prepareStatement(SQL);
 			rs = ps.executeQuery();
 			List<Aluno> lAlun = new ArrayList<>();
@@ -133,6 +121,47 @@ public class AlunoDAO {
 		}
 	}
 	
+	
+	/**Método para buscar aluno por rm.
+	 * @param rm String - Identificação unica do aluno, rm.
+	 * @return List<Aluno> - uma lista contendo dados pesquisados.
+	*/
+	public List<Aluno> buscaPorRm(String rm) throws Exception {
+		if (rm == null)
+			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
+		try {
+			this.conn = ConnectionFactory.getConnection();
+			String SQL = String.format("SELECT * FROM alunos "
+					+ "WHERE rm = '%s';",
+					rm
+					);
+			ps = conn.prepareStatement(SQL);
+			rs = ps.executeQuery();
+			List<Aluno> lAlun = new ArrayList<>();
+			while (rs.next()) {
+				Aluno alun = new Aluno(
+						rs.getString("rm"),
+						rs.getString("cpf"),
+						rs.getString("email"),
+						rs.getString("nome"),
+						rs.getString("data_nascimento"),
+						rs.getString("endereco"),
+						rs.getString("municipio"),
+						rs.getString("uf"),
+						rs.getString("curso"),
+						rs.getString("ano_matricula"),
+						rs.getString("semestre_matricula"),
+						rs.getString("telefone")
+						);
+				lAlun.add(alun);
+				}
+			return lAlun;
+		} catch (SQLException sqle) {
+			throw new Exception("Erro ao inserir dados " + sqle);
+		} finally {
+			ConnectionFactory.closeConnection(conn, ps);
+		}
+	}
 	
 	/**Método para alterar o aluno na base de dados.
 	 * @param aluno Aluno - objeto da classe Aluno.
@@ -163,17 +192,17 @@ public class AlunoDAO {
 		}
 	}
 	
-	/**Método para buscar uma lista de alunos da base de dados.
+	/**Método para listar disciplinas cursadas pelo aluno.
 	 * @param parametro String - Identificação do aluno por rm ou cpf.
-	 * @return List<Aluno> - uma lista contendo dados pesquisados.
+	 * @return List<Matricula> - uma lista contendo dados pesquisados.
 	*/
-	public List<Matricula> matriculasFeitas(String rm) throws Exception {
+	public List<Disciplina> disciplinasFeitas(String rm) throws Exception {
 		if (rm == null)
 			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
 		try {
 			this.conn = ConnectionFactory.getConnection();
 
-			String SQL = String.format("SELECT d.nome, m.ano, m.semestre, m.turno, m.nota, m.n_faltas FROM matriculados m "
+			String SQL = String.format("SELECT d.id, d.nome nome, m.ano ano, m.semestre semestre, m.nota nota, m.n_faltas n_faltas FROM matriculados m "
 					+ "INNER JOIN alunos a ON m.aluno = a.rm "
 					+ "INNER JOIN disciplinas d ON m.disciplina = d.id "
 					+ "WHERE rm = '%s' "
@@ -186,13 +215,12 @@ public class AlunoDAO {
 					);
 			ps = conn.prepareStatement(SQL);
 			rs = ps.executeQuery();
-			List<Matricula> lDisc = new ArrayList<>();
+			List<Disciplina> lDisc = new ArrayList<>();
 			while (rs.next()) {
-				Matricula disc = new Matricula(
+				Disciplina disc = new Disciplina(
 						rs.getString("nome"),
 						rs.getString("ano"),
 						rs.getString("semestre"),
-						rs.getString("turno"),
 						rs.getString("nota"),
 						rs.getString("n_faltas")
 						);
@@ -205,6 +233,42 @@ public class AlunoDAO {
 			ConnectionFactory.closeConnection(conn, ps);
 		}
 	}
+	
+	/**Método para listar disciplinas cursadas pelo aluno.
+	 * @param parametro String - Identificação do aluno por rm ou cpf.
+	 * @return List<Matricula> - uma lista contendo dados pesquisados.
+	*/
+	public List<Disciplina> matriculasQuePodeFazer(String curso) throws Exception {
+		if (curso == null)
+			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
+		try {
+			this.conn = ConnectionFactory.getConnection();
+
+			String SQL = String.format("SELECT c.id AS curso_id, d.id AS disciplina_id, d.nome AS disciplina_nome "
+					+ "FROM cursos c INNER JOIN disciplinas d WHERE c.id=%s;",
+					curso
+					);
+			ps = conn.prepareStatement(SQL);
+			rs = ps.executeQuery();
+			List<Disciplina> lDisc = new ArrayList<>();
+			while (rs.next()) {
+				Disciplina disc = new Disciplina(
+						rs.getString("nome"),
+						rs.getString("ano"),
+						rs.getString("semestre"),
+						rs.getString("nota"),
+						rs.getString("n_faltas")
+						);
+				lDisc.add(disc);
+				}
+			return lDisc;
+		} catch (SQLException sqle) {
+			throw new Exception("Erro ao inserir dados " + sqle);
+		} finally {
+			ConnectionFactory.closeConnection(conn, ps);
+		}
+	}
+	
 	
 	public int numeroDeMatriculados(int curso, String ano_matricula, String semestre_matricula)
 			throws Exception{
