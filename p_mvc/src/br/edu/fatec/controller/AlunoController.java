@@ -118,8 +118,8 @@ public class AlunoController {
 	 * @param endereco String - Endereco do aluno  
 	 * @return String - rm associado a aluno salvo.
 	*/
-	public String salvaAluno(
-			String rm = "",
+	public String alteraSalvaAluno(
+			String rm_trazido,
 			String cpf,
 			String email,
 			String nome,
@@ -134,24 +134,44 @@ public class AlunoController {
 			String telefone) throws Exception{
 		try {
 			AlunoDAO ald = new AlunoDAO();
-			int numMatriculados = ald.numeroDeMatriculados(curso, ano_matricula, semestre_matricula);
-			String rm = String.format("%02d%02d%s%s%03d",campus,curso,ano_matricula,semestre_matricula,(numMatriculados+1));
-			Aluno al = new Aluno(
-					rm,
-					cpf,
-					email,
-					nome,
-					data_nascimento,
-					endereco,
-					municipio,
-					Integer.toString(uf),
-					Integer.toString(curso),
-					ano_matricula,
-					semestre_matricula,
-					telefone
-					);
-			ald.salvar(al);
-			return rm;
+			if(rm_trazido.equals("")) {
+				int numMatriculados = ald.numeroDeMatriculados(curso, ano_matricula, semestre_matricula);
+				String rm = String.format("%02d%02d%s%s%03d",campus,curso,ano_matricula,semestre_matricula,(numMatriculados+1));
+				Aluno al = new Aluno(
+						rm,
+						cpf,
+						email,
+						nome,
+						data_nascimento,
+						endereco,
+						municipio,
+						Integer.toString(uf),
+						Integer.toString(curso),
+						ano_matricula,
+						semestre_matricula,
+						telefone
+						);
+				ald.salvar(al);
+				return rm;
+			}
+			else {
+				Aluno al = new Aluno(
+						rm_trazido,
+						cpf,
+						email,
+						nome,
+						data_nascimento,
+						endereco,
+						municipio,
+						Integer.toString(uf),
+						Integer.toString(curso),
+						ano_matricula,
+						semestre_matricula,
+						telefone
+						);
+				ald.alterar(al);
+				return rm_trazido;				
+			}
 		} catch (Exception err) {
 			throw new Exception(err.getMessage());
 		}
@@ -181,7 +201,6 @@ public class AlunoController {
 					res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
 					i++;
 				}				
-//				res[i] = String.format("%s - %s - %s", item.getRm(),item.getNome(),lCursos.get(Integer.parseInt(item.getCurso())).getNome() );
 				return res;
 			}
 			else {
@@ -192,8 +211,7 @@ public class AlunoController {
 		}
 	}
 	
-	
-	
+		
 	public Aluno buscaPorRm(String rm) throws Exception{
 		try {
 			AlunoDAO ald = new AlunoDAO();
@@ -207,8 +225,6 @@ public class AlunoController {
 		}
 	}
 
-	
-	
 	public List<Disciplina> buscaDisciplinaCursada(String rm) throws Exception{
 		try {
 			AlunoDAO ald = new AlunoDAO();
@@ -222,4 +238,44 @@ public class AlunoController {
 		}
 	}
 	
+	public String[] buscaNotasEFaltas(String rm, String nome_curso, String ano_matricula, String semestre_matricula)  throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			String[] res = new String[2];
+			res = ald.notasFaltas(rm, nome_curso, ano_matricula, semestre_matricula);
+			return(res);			
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+		}
+	}
+	
+	public void atualizaNotasEFalatas(String rm, String nome_curso, String ano_matricula, String semestre_matricula, String nota, String falta) throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			ald.atualizaNotasFaltas(rm, nome_curso, ano_matricula, semestre_matricula, nota, falta);			
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+		}
+	}
+	
+	public void excluiAluno(String rm) throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			ald.apaga(rm);
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+		}
+	}
+	
+	public List<String> mostraBoletim(String rm) throws Exception{
+		try {
+			AlunoDAO ald = new AlunoDAO();
+			List<String> res = new ArrayList<>();
+			res = ald.boletim(rm);
+			return(res);
+		} catch(Exception err) {
+			throw new Exception(err.getMessage());
+		}
+		
+	}
 }

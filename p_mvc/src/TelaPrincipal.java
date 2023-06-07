@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -31,31 +32,24 @@ import br.edu.fatec.model.Campus;
 import br.edu.fatec.model.Curso;
 import br.edu.fatec.model.Disciplina;
 import br.edu.fatec.model.Ufs;
+import java.beans.VetoableChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class TelaPrincipal extends JFrame {
 
 	private final ButtonGroup Periodo = new ButtonGroup();
 	private JButton btnConsultar;
 	private JButton btnExcluir;
-	private JButton btnExcluir_1;
 	private JButton btnLimpar;
-	private JButton btnLimpar_1;
 	private JButton btnNewButton;
 	private JButton btnSalvar;
-	private JButton btnSalvar_1;
-	private JButton btnSalvar_3;
-	private JButton btnSalvar_4;
+	private JButton btnConsultar_3;
+	private JButton btnLimpar_3;
 	private JButton btnSalvar_5;
-	private JButton btnSalvar_6;
 	private JComboBox<String> cboxDisciplina;
-	private JComboBox<String> comboBox_5;
 	private JComboBox<String> cboxCampus;
 	private JComboBox<String> cboxCurso;
 	private JComboBox<String> cboxUf;
-	private JEditorPane editorPane_11;
-	private JEditorPane editorPane_12;
-	private JEditorPane editorPane_14;
-	private JEditorPane editorPane_9;
 	private JLabel lblNome;
 	private JLabel lblNome_1;
 	private JLabel lblNome_10;
@@ -96,7 +90,7 @@ public class TelaPrincipal extends JFrame {
 	private JPanel panel_2;
 	private JPanel dadosDoAluno;
 	private JPanel notasEFaltas;
-	private JPanel panel_6;
+	private JPanel boletim;
 	private JRadioButton rdbMatutino;
 	private JRadioButton rdbNoturno;
 	private JRadioButton rdbVespertino;
@@ -113,11 +107,16 @@ public class TelaPrincipal extends JFrame {
 	private TextArea txtMostrar;
 	private JTextField textFAno;
 	private JTextField textFSemestre;
-	private JTextField textFRm_1;
-	private JTextField textFNome_1;
-	private JTextField textFCurso_1;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textFRm_2;
+	private JTextField textFNome_2;
+	private JTextField textFCurso_2;
+	private JTextField textFieldAno_2;
+	private JTextField textFieldSemestre_2;
+	private JTextField textFNota_2;
+	private JTextField textFFaltas_2;
+	private JTextField textFRm_3;
+	private JTextField textFNome_3;
+	private JTextField textFCurso_3;
 
 
 	/**
@@ -153,18 +152,35 @@ public class TelaPrincipal extends JFrame {
 		mnNewMenu.add(mntmNewMenuItem);
 
 		mntmNewMenuItem_6 = new JMenuItem("Sair");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_6);
 
 		mnNewMenu_1 = new JMenu("Cursos");
 		menuBar.add(mnNewMenu_1);
 
 		mntmNewMenuItem_3 = new JMenuItem("Cursos");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Cursos c = new Cursos();
+				c.setVisible(true);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_3);
 
 		mnNewMenu_2 = new JMenu("Help");
 		menuBar.add(mnNewMenu_2);
 
 		mntmNewMenuItem_2 = new JMenuItem("Desenvolvedores");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Help h = new Help();
+				h.setVisible(true);
+			}
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_2);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -302,6 +318,7 @@ public class TelaPrincipal extends JFrame {
 		textFRm.setBounds(379, 23, 289, 34);
 		dadosDoAluno.add(textFRm);
 		textFRm.setColumns(10);
+		textFRm.setText("");
 		
 		textFNome = new JTextField();
 		textFNome.setColumns(10);
@@ -399,136 +416,147 @@ public class TelaPrincipal extends JFrame {
 
 		lblNome_18 = new JLabel("Nota");
 		lblNome_18.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblNome_18.setBounds(207, 406, 137, 34);
+		lblNome_18.setBounds(208, 406, 38, 34);
 		notasEFaltas.add(lblNome_18);
-
-		comboBox_5 = new JComboBox();
-		comboBox_5.setBounds(273, 411, 113, 27);
-		notasEFaltas.add(comboBox_5);
 
 		lblNome_19 = new JLabel("Faltas");
 		lblNome_19.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblNome_19.setBounds(441, 406, 137, 34);
+		lblNome_19.setBounds(441, 406, 50, 34);
 		notasEFaltas.add(lblNome_19);
-
-		editorPane_11 = new JEditorPane();
-		editorPane_11.setBounds(527, 406, 137, 34);
-		notasEFaltas.add(editorPane_11);
-
-		btnSalvar_1 = new JButton("Salvar");
-		btnSalvar_1.setBounds(602, 541, 89, 23);
-		notasEFaltas.add(btnSalvar_1);
-
-		btnLimpar_1 = new JButton("Limpar");
-		btnLimpar_1.setBounds(489, 541, 89, 23);
-		notasEFaltas.add(btnLimpar_1);
-
-		btnExcluir_1 = new JButton("Excluir");
-		btnExcluir_1.setBounds(242, 541, 89, 23);
-		notasEFaltas.add(btnExcluir_1);
 
 		lblNome_22 = new JLabel("Dados para registro");
 		lblNome_22.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_22.setBounds(293, 255, 137, 34);
 		notasEFaltas.add(lblNome_22);
-
-		btnSalvar_6 = new JButton("Consultar");
-		btnSalvar_6.setBounds(376, 541, 89, 23);
-		notasEFaltas.add(btnSalvar_6);
 		
-		textFRm_1 = new JTextField();
-		textFRm_1.setEnabled(false);
-		textFRm_1.setEditable(false);
-		textFRm_1.setColumns(10);
-		textFRm_1.setBounds(389, 25, 289, 34);
-		notasEFaltas.add(textFRm_1);
+		textFRm_2 = new JTextField();
+		textFRm_2.setEnabled(false);
+		textFRm_2.setEditable(false);
+		textFRm_2.setColumns(10);
+		textFRm_2.setBounds(389, 25, 289, 34);
+		notasEFaltas.add(textFRm_2);
 		
-		textFNome_1 = new JTextField();
-		textFNome_1.setEnabled(false);
-		textFNome_1.setEditable(false);
-		textFNome_1.setColumns(10);
-		textFNome_1.setBounds(57, 103, 621, 34);
-		notasEFaltas.add(textFNome_1);
+		textFNome_2 = new JTextField();
+		textFNome_2.setEnabled(false);
+		textFNome_2.setEditable(false);
+		textFNome_2.setColumns(10);
+		textFNome_2.setBounds(57, 103, 621, 34);
+		notasEFaltas.add(textFNome_2);
 		
-		textFCurso_1 = new JTextField();
-		textFCurso_1.setEnabled(false);
-		textFCurso_1.setEditable(false);
-		textFCurso_1.setColumns(10);
-		textFCurso_1.setBounds(57, 169, 621, 34);
-		notasEFaltas.add(textFCurso_1);
+		textFCurso_2 = new JTextField();
+		textFCurso_2.setEnabled(false);
+		textFCurso_2.setEditable(false);
+		textFCurso_2.setColumns(10);
+		textFCurso_2.setBounds(57, 169, 621, 34);
+		notasEFaltas.add(textFCurso_2);
 		
-		textField = new JTextField();
-		textField.setText("2023");
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBounds(57, 341, 87, 34);
-		notasEFaltas.add(textField);
+		textFieldAno_2 = new JTextField();
+		textFieldAno_2.setText("2023");
+		textFieldAno_2.setEnabled(false);
+		textFieldAno_2.setEditable(false);
+		textFieldAno_2.setColumns(10);
+		textFieldAno_2.setBounds(57, 341, 87, 34);
+		notasEFaltas.add(textFieldAno_2);
 		
 		JLabel lblNome_17_1 = new JLabel("Ano");
 		lblNome_17_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_17_1.setBounds(30, 340, 38, 34);
 		notasEFaltas.add(lblNome_17_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setText("2");
-		textField_1.setEnabled(false);
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setBounds(307, 341, 87, 34);
-		notasEFaltas.add(textField_1);
+		textFieldSemestre_2 = new JTextField();
+		textFieldSemestre_2.setText("2");
+		textFieldSemestre_2.setEnabled(false);
+		textFieldSemestre_2.setEditable(false);
+		textFieldSemestre_2.setColumns(10);
+		textFieldSemestre_2.setBounds(307, 341, 87, 34);
+		notasEFaltas.add(textFieldSemestre_2);
+		
+		textFNota_2 = new JTextField();
+		textFNota_2.setBounds(245, 414, 86, 20);
+		notasEFaltas.add(textFNota_2);
+		textFNota_2.setColumns(10);
+		
+		textFFaltas_2 = new JTextField();
+		textFFaltas_2.setColumns(10);
+		textFFaltas_2.setBounds(489, 414, 86, 20);
+		notasEFaltas.add(textFFaltas_2);
+		
+		JButton btnExcluir_2 = new JButton("Excluir");
+		btnExcluir_2.setBounds(224, 540, 89, 23);
+		notasEFaltas.add(btnExcluir_2);
+		
+		JButton btnLimpar_2 = new JButton("Limpar");
+		btnLimpar_2.setBounds(354, 540, 89, 23);
+		notasEFaltas.add(btnLimpar_2);
+		
+		JButton btnConsultar_2 = new JButton("Consultar");
+		btnConsultar_2.setBounds(473, 540, 89, 23);
+		notasEFaltas.add(btnConsultar_2);
+		
+		JButton btnSalvar_2 = new JButton("Salvar");
+		btnSalvar_2.setBounds(589, 540, 89, 23);
+		notasEFaltas.add(btnSalvar_2);
 
-		panel_6 = new JPanel();
-		tabbedPane_1.addTab("Boletim", null, panel_6, null);
-		panel_6.setLayout(null);
-
-		editorPane_12 = new JEditorPane();
-		editorPane_12.setBounds(330, 25, 197, 34);
-		panel_6.add(editorPane_12);
+		boletim = new JPanel();
+		tabbedPane_1.addTab("Boletim", null, boletim, null);
+		boletim.setLayout(null);
 
 		lblNome_20 = new JLabel("RGM");
 		lblNome_20.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_20.setBounds(263, 25, 57, 34);
-		panel_6.add(lblNome_20);
+		boletim.add(lblNome_20);
 
 		lblNome_23 = new JLabel("Nome");
 		lblNome_23.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_23.setBounds(21, 82, 107, 34);
-		panel_6.add(lblNome_23);
-
-		editorPane_9 = new JEditorPane();
-		editorPane_9.setBounds(83, 82, 593, 34);
-		panel_6.add(editorPane_9);
+		boletim.add(lblNome_23);
 
 		lblNome_24 = new JLabel("Registro de notas e faltas");
 		lblNome_24.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_24.setBounds(246, 190, 240, 34);
-		panel_6.add(lblNome_24);
+		boletim.add(lblNome_24);
 
 		txtMostrar = new TextArea();
 		txtMostrar.setBounds(21, 230, 670, 258);
-		panel_6.add(txtMostrar);
-
-		editorPane_14 = new JEditorPane();
-		editorPane_14.setBounds(83, 143, 593, 34);
-		panel_6.add(editorPane_14);
+		boletim.add(txtMostrar);
 
 		lblNome_25 = new JLabel("Curso");
 		lblNome_25.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lblNome_25.setBounds(21, 143, 107, 34);
-		panel_6.add(lblNome_25);
+		boletim.add(lblNome_25);
 
-		btnSalvar_3 = new JButton("Consultar");
-		btnSalvar_3.setBounds(587, 544, 89, 23);
-		panel_6.add(btnSalvar_3);
+		btnConsultar_3 = new JButton("Consultar");
+		btnConsultar_3.setBounds(587, 544, 89, 23);
+		boletim.add(btnConsultar_3);
 
-		btnSalvar_4 = new JButton("Limpar");
-		btnSalvar_4.setBounds(459, 544, 89, 23);
-		panel_6.add(btnSalvar_4);
+		btnLimpar_3 = new JButton("Limpar");
+		btnLimpar_3.setBounds(459, 544, 89, 23);
+		boletim.add(btnLimpar_3);
 
 		btnSalvar_5 = new JButton("PDF");
 		btnSalvar_5.setBounds(10, 557, 89, 23);
-		panel_6.add(btnSalvar_5);
+		boletim.add(btnSalvar_5);
+		
+		textFRm_3 = new JTextField();
+		textFRm_3.setEnabled(false);
+		textFRm_3.setEditable(false);
+		textFRm_3.setColumns(10);
+		textFRm_3.setBounds(330, 26, 289, 34);
+		boletim.add(textFRm_3);
+		
+		textFNome_3 = new JTextField();
+		textFNome_3.setEnabled(false);
+		textFNome_3.setEditable(false);
+		textFNome_3.setColumns(10);
+		textFNome_3.setBounds(70, 89, 621, 34);
+		boletim.add(textFNome_3);
+		
+		textFCurso_3 = new JTextField();
+		textFCurso_3.setEnabled(false);
+		textFCurso_3.setEditable(false);
+		textFCurso_3.setColumns(10);
+		textFCurso_3.setBounds(70, 155, 621, 34);
+		boletim.add(textFCurso_3);
 		
 		
 		// ComboBox UfsCampusCursos
@@ -572,16 +600,70 @@ public class TelaPrincipal extends JFrame {
 				limparCampoAluno();
 			}
 		});
+		
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirAluno();
+			}
+		});
+		
 		// end Painel DadosDoAluno
 		
 		// Painel NotasEFaltas
-		btnSalvar_1.addActionListener(new ActionListener() {
+		cboxDisciplina.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				salvarAluno();
+				pegarNotaEFalta();
+			}
+			
+		});
+		
+		btnSalvar_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					AlunoController al = AlunoController.getInstance();
+					String rm = textFRm.getText();
+					String nome_curso = (String)cboxDisciplina.getSelectedItem();
+					String ano_matricula = textFieldAno_2.getText();
+					String semestre_matricula = textFieldSemestre_2.getText();
+					String nota = textFNota_2.getText();
+					String falta = textFFaltas_2.getText();
+					al.atualizaNotasEFalatas(rm, nome_curso, ano_matricula, semestre_matricula, nota, falta);
+					JOptionPane.showMessageDialog(null, "Nota e falta alterada");
+				} catch(Exception err) {
+					JOptionPane.showMessageDialog(null, err.getMessage());
+				}
 			}
 		});
+		
+		btnConsultar_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarAluno();
+			}
+		});
+		
+		btnLimpar_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limparCampoAluno();
+			}
+		});
+		
+		btnExcluir_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirAluno();
 
+			}
+		});
 		// end Painel NotasEFaltas
+		
+		// Painel Boletim
+		btnConsultar_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				;
+			}
+		});
+		
+		// end Painel Boletim
 		
 	}
 	
@@ -590,7 +672,8 @@ public class TelaPrincipal extends JFrame {
 	private void salvarAluno() {
 		try {
 			AlunoController al = AlunoController.getInstance();
-			String rm = al.salvaAluno(
+			String rm = al.alteraSalvaAluno(
+					textFRm.getText(),
 					textFCpf.getText(), //cpf
 					textFEmail.getText(), //email
 					textFNome.getText(), // nome
@@ -604,10 +687,19 @@ public class TelaPrincipal extends JFrame {
 					textFSemestre.getText(), //semestre_matricula
 					textFTelefone.getText() //telefone
 					);
-			textFRm.setText(rm);
-			JOptionPane.showMessageDialog(null, "Aluno salvo com rm: "+rm+"\npressione limpar para salvar proximo aluno");
+
 			// Painel DadosDoAluno
+			textFRm.setText(rm);
 			btnSalvar.setText("Alterar");
+			// Painel NotasEFaltas
+			textFRm_2.setText(rm);
+			textFNome_2.setText(textFNome.getText());
+			textFCurso_2.setText((String)cboxCurso.getSelectedItem());
+			// Painel Boletim
+			textFRm_3.setText(rm);
+			textFNome_3.setText(textFNome.getText());
+			textFCurso_3.setText((String)cboxCurso.getSelectedItem());
+
 
 		}catch(Exception err) {
 			JOptionPane.showMessageDialog(null, err.getMessage());
@@ -629,9 +721,11 @@ public class TelaPrincipal extends JFrame {
 	        	entrada = (String)JOptionPane.showInputDialog(null,"Alunos encontrados",
 	        			"Pesquisa de aluno", JOptionPane.QUESTION_MESSAGE,icon, options, options[0]);			        	
 	        	if (entrada != null) {
+	        		limparCampoAluno();
 	        		String array[] = new String[3];
 	        		array = entrada.split(" - ");
 	        		Aluno aluno = al.buscaPorRm(array[0]);
+
 	        		//painel dados do aluno
 	        		textFCpf.setText(aluno.getCpf()); //cpf
 	        		textFEmail.setText(aluno.getEmail()); //email
@@ -642,12 +736,17 @@ public class TelaPrincipal extends JFrame {
 	        		textFTelefone.setText(aluno.getTelefone());//telefone
 	        		textFRm.setText(aluno.getRm()); //rm
 	        		btnSalvar.setText("Alterar");
+	        		
 	        		// painel notas e faltas
-	        		textFRm_1.setText(aluno.getRm());
-	        		textFNome_1.setText(aluno.getNome());
-	        		textFCurso_1.setText(array[2]);
+	        		textFRm_2.setText(aluno.getRm());
+	        		textFNome_2.setText(aluno.getNome());
+	        		textFCurso_2.setText(array[2]);
 	        		carregarDisciplinas(al,aluno.getRm());
-
+	        		// Painel Boletim
+	    			textFRm_3.setText(textFRm.getText());
+	    			textFNome_3.setText(textFNome.getText());
+	    			textFCurso_3.setText(textFCurso_2.getText());
+	    			boletim(textFRm.getText());
 	        	}
 	        }
 	    }
@@ -663,10 +762,12 @@ public class TelaPrincipal extends JFrame {
 				DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cboxDisciplina.getModel();
 				for(Disciplina item: lDisc){
 					model.addElement(item.getNome());
-				}				
+				}
+				textFieldAno_2.setText(lDisc.get(0).getAno());
+				textFieldSemestre_2.setText(lDisc.get(0).getSemestre());
 			}
 		} catch(Exception err) {
-			JOptionPane.showMessageDialog(null, "Erro ao buscar disciplinas associadas");
+			JOptionPane.showMessageDialog(null, err.getMessage());
 		}
 	}
 	
@@ -681,12 +782,64 @@ public class TelaPrincipal extends JFrame {
 		textFRm.setText(""); //rm
 		textFAno.setText("2023");
 		textFSemestre.setText("2");
-		btnSalvar.setEnabled(true);
-	 	// painel notas e faltas
-    	textFRm_1.setText("");
-    	textFNome_1.setText("");
-    	textFCurso_1.setText("");
-
+		btnSalvar.setText("Salvar");
 		
+	 	// painel notas e faltas
+    	textFRm_2.setText("");
+    	textFNome_2.setText("");
+    	textFCurso_2.setText("");
+    	textFieldAno_2.setText("2023");
+    	textFieldSemestre_2.setText("2");
+		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cboxDisciplina.getModel();
+		model.removeAllElements();
+		
+		// Painel Boletim
+		textFRm_3.setText("");
+    	textFNome_3.setText("");
+    	textFCurso_3.setText("");
+		
+	}
+	
+	public void excluirAluno() {
+		if(!textFRm.getText().equals("")) {
+			try {
+				AlunoController al = AlunoController.getInstance();
+				JOptionPane.showMessageDialog(null, "Aluno Excluido");
+				al.excluiAluno(textFRm.getText());
+				limparCampoAluno();
+
+			} catch(Exception err) {
+				JOptionPane.showMessageDialog(null, err.getMessage());
+			}
+		}
+	}
+	
+	public void pegarNotaEFalta() {
+		try {
+			AlunoController al = AlunoController.getInstance();
+			String rm = textFRm.getText();
+			String nome_curso = (String)cboxDisciplina.getSelectedItem();
+			String ano_matricula = textFieldAno_2.getText();
+			String semestre_matricula = textFieldSemestre_2.getText();
+			String[] res = al.buscaNotasEFaltas(rm, nome_curso, ano_matricula, semestre_matricula);
+			textFNota_2.setText(res[0]);
+			textFFaltas_2.setText(res[1]);
+			boletim(rm);
+			
+		} catch(Exception err) {
+			JOptionPane.showMessageDialog(null, err.getMessage());
+		}
+	}
+	
+	public void boletim(String rm) {
+		try {
+			AlunoController al = AlunoController.getInstance();
+			List<String> res = new ArrayList<>();
+			res = al.mostraBoletim(rm);
+			txtMostrar.setText(String.join("\n", res) );
+			
+		} catch(Exception err) {
+			JOptionPane.showMessageDialog(null, err.getMessage());
+		}
 	}
 }

@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import br.edu.fatec.model.Aluno;
 import br.edu.fatec.model.Disciplina;
@@ -63,10 +66,9 @@ public class AlunoDAO {
 	/**Método para deletar um aluno da base de dados.
 	 * @param rm String - Identificação unica do aluno.
 	*/
-	public void deletar(String rm) throws Exception {
-		if (rm == null)
-			throw new IllegalArgumentException("O valor passado nao pode ser nulo");
+	public void apaga(String rm) throws Exception {
 		try {
+			this.conn = ConnectionFactory.getConnection();
 			String SQL = String.format("DELETE FROM alunos "
 					+ "WHERE rm = '%s';",
 					rm
@@ -170,8 +172,9 @@ public class AlunoDAO {
 		if (aluno == null)
 			throw new Exception("O valor passado nao pode ser nulo");
 		try {
+			this.conn = ConnectionFactory.getConnection();
 			String SQL = String.format("UPDATE alunos SET "
-					+ "cpf = '%s', email = '%s', nome = '%s', data_nascimento = '%s', endereco = '%s', municipio = '%s', uf = %s, curso = %s "
+					+ "cpf = '%s', email = '%s', nome = '%s', data_nascimento = '%s', endereco = '%s', municipio = '%s', uf = %s, curso = %s, telefone = %s "
 					+ "WHERE rm = '%s'",
 					aluno.getCpf(),
 					aluno.getEmail(),
@@ -181,6 +184,7 @@ public class AlunoDAO {
 					aluno.getMunicipio(),	
 					aluno.getUf(),
 					aluno.getCurso(),
+					aluno.getTelefone(),
 					aluno.getRm()
 					);
 			ps = conn.prepareStatement(SQL);
@@ -291,4 +295,73 @@ public class AlunoDAO {
 		return res;
 	}
 
+	public String[] notasFaltas(String rm, String nome_curso, String ano_matricula, String semestre_matricula) throws Exception{
+		this.conn = ConnectionFactory.getConnection();
+		String[] res = new String[2];
+		String SQL = String.format("SELECT * FROM matriculados m LEFT JOIN disciplinas d ON m.disciplina=d.id WHERE aluno='%s' AND nome='%s' AND ano='%s' AND semestre='%s';",
+				rm,nome_curso,ano_matricula,semestre_matricula);
+		try {
+			ps = conn.prepareStatement(SQL);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				res[0] = rs.getString("nota");
+				res[1] = rs.getString("n_faltas");
+			}
+		} catch(Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(conn, ps);
+		}
+		return res;
+	}
+	
+	public void atualizaNotasFaltas(String rm, String nome_curso, String ano_matricula, String semestre_matricula, String nota, String falta) throws Exception{
+		this.conn = ConnectionFactory.getConnection();
+		String SQL = String.format("UPDATE matriculados m LEFT JOIN disciplinas d ON m.disciplina=d.id SET n_faltas=%s, nota=%s WHERE aluno='%s' AND d.nome='%s' AND ano=%s AND semestre=%s;",
+				falta,nota,rm,nome_curso,ano_matricula,semestre_matricula);
+		try {
+			ps = conn.prepareStatement(SQL);
+			ps.executeUpdate();
+		} catch(Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(conn, ps);
+		}
+	}
+	
+	public List<String> boletim(String rm) throws Exception {
+		this.conn = ConnectionFactory.getConnection();
+		List<String> res = new ArrayList<>();
+		String SQL = String.format("SELECT m.ano, m.semestre, d.nome, m.nota, m.n_faltas FROM matriculados m "
+				+ "left JOIN alunos a ON m.aluno = a.rm "
+				+ "left JOIN disciplinas d ON m.disciplina = d.id "
+				+ "left JOIN cursos c ON c.id = d.curso "
+				+ "WHERE rm ='%s' "
+				+ "ORDER BY "
+				+ "m.ano, "
+				+ "m.semestre, "
+				+ "m.turno, "
+				+ "d.nome;",rm);
+		try {
+			ps = conn.prepareStatement(SQL);
+			rs = ps.executeQuery();
+			String anoSemestre = "";
+			while(rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				if(!anoSemestre.equals( String.format("%s %s", rs.getString("ano"), rs.getString("semestre")) ) ) {
+					anoSemestre = String.format("%s %s", rs.getString("ano"), rs.getString("semestre"));
+					res.add(anoSemestre);
+				}
+				String curso = rs.getString("nome");
+				String nota = rs.getString("nota");
+				String falta = rs.getString("n_faltas");
+				res.add(curso+" ".repeat(6)+"nota: "+nota+" ".repeat(3)+"falta: "+falta) ;
+			}
+		} catch(Exception e) {
+			throw new Exception(e.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(conn, ps);
+		}
+		return res;
+	}
 }
